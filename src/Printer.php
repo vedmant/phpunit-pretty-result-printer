@@ -79,7 +79,9 @@ final class Printer
     ) {
         $this->loadConfiguration();
 
-        $this->maxNumberOfColumns = max(16, $columns - 5);
+        $columns = $this->resolveColumns($columns);
+
+        $this->maxNumberOfColumns = max(16, $columns - 1);
         $this->maxClassNameLength = min(
             max(40, (int) ($this->maxNumberOfColumns * 0.6)),
             $this->maxClassNameLength,
@@ -260,31 +262,32 @@ final class Printer
         $this->write(PHP_EOL);
         $formatted = $this->formatClassName($this->className);
         $this->write($this->colorize('fg-cyan,bold', $formatted));
-        $this->column        = strlen($formatted) + 1;
+        $this->column        = strlen($formatted);
         $this->lastClassName = $this->className;
     }
 
     private function printTestCaseStatus(string $status): void
     {
-        if ($this->column >= $this->maxNumberOfColumns) {
-            $this->write(PHP_EOL . str_pad(' ', $this->maxClassNameLength));
-            $this->column = $this->maxClassNameLength;
-        }
-
-        $color  = $this->colorFor($status);
         $buffer = $this->simpleOutput ? $this->simpleMarkerFor($status) : $this->markerFor($status);
 
         if ($this->debug) {
             $buffer .= ' ' . ucfirst($status);
         }
 
-        $this->write($this->colorize($color, $buffer));
+        $width = $this->visibleWidth($buffer);
+
+        if ($this->column > 0 && $this->column + $width > $this->maxNumberOfColumns) {
+            $this->write(PHP_EOL . str_pad(' ', $this->maxClassNameLength));
+            $this->column = $this->maxClassNameLength;
+        }
+
+        $this->write($this->colorize($this->colorFor($status), $buffer));
 
         if ($this->debug) {
             $this->write(PHP_EOL);
         }
 
-        $this->column += $this->visibleWidth($buffer);
+        $this->column += $width;
     }
 
     private function printBanner(): void
@@ -394,6 +397,44 @@ final class Printer
             'notice'      => 'N',
             default       => '?',
         };
+    }
+
+    private function resolveColumns(int $configured): int
+    {
+        if (!is_resource($this->stream) || !@stream_isatty($this->stream)) {
+            return max(16, $configured);
+        }
+
+        return max(16, $configured, $this->detectTerminalWidth());
+    }
+
+    private function detectTerminalWidth(): int
+    {
+        $env = getenv('COLUMNS');
+
+        if (is_string($env) && ctype_digit($env)) {
+            $width = (int) $env;
+
+            if ($width >= 16) {
+                return $width;
+            }
+        }
+
+        if (!function_exists('shell_exec')) {
+            return 0;
+        }
+
+        $tput = @shell_exec('tput cols 2>/dev/null');
+
+        if (is_string($tput) && ctype_digit(trim($tput))) {
+            $width = (int) trim($tput);
+
+            if ($width >= 16) {
+                return $width;
+            }
+        }
+
+        return 0;
     }
 
     private function visibleWidth(string $buffer): int

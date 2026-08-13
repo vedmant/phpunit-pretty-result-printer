@@ -16,7 +16,7 @@ PHPUnit Pretty Result Printer 1.0.0 by Codedungeon and contributors.
 
 PHPUnit still prints its own failure details and summary. Only **progress** is replaced (`$facade->replaceProgressOutput()`), so you do **not** need `--no-progress`.
 
-The class-name column uses about 60% of the terminal width (40–60 characters) so typical test names stay readable. Markers are one space apart (`✔ ✔`). Very long names still get a leading ellipsis.
+The class-name column uses about 60% of the **actual terminal width** (40–60 characters) so typical test names stay readable. Markers then fill the rest of the line, one space apart (`✔ ✔`). Very long names still get a leading ellipsis.
 
 ---
 

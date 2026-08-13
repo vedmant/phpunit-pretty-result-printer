@@ -50,7 +50,7 @@ final class PrinterTest extends TestCase
 
         $this->assertStringStartsWith(' ==> ', $formatted);
         $this->assertStringContainsString('FooTest', $formatted);
-        $this->assertSame(45, strlen($formatted));
+        $this->assertSame(47, strlen($formatted));
     }
 
     public function testFormatClassNameKeepsTypicalLongClassNames(): void
