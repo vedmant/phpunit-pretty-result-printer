@@ -10,11 +10,13 @@ This is a maintained fork of [`codedungeon/phpunit-result-printer`](https://gith
 PHPUnit Pretty Result Printer 1.0.0 by Codedungeon and contributors.
 ==> Configuration: ~/project/phpunit-printer.yml
 
- ==> ExampleTest                   ✔  ✔  ✖  ⇢
- ==> AnotherTest                   ✔  ✔
+ ==> RefreshExternalDomainsCommandTest   ✔ ✔ ✖ ⇢
+ ==> SearchTest                          ✔ ✔
 ```
 
 PHPUnit still prints its own failure details and summary. Only **progress** is replaced (`$facade->replaceProgressOutput()`), so you do **not** need `--no-progress`.
+
+The class-name column uses about 60% of the terminal width (40–60 characters) so typical test names stay readable. Markers are one space apart (`✔ ✔`). Very long names still get a leading ellipsis.
 
 ---
 
@@ -70,7 +72,7 @@ Create a `phpunit-printer.yml` file in your application root to override the pac
 | `cd-printer-anybar-port`           | 1738        | Define AnyBar port number                                            |
 | `cd-printer-dont-format-classname` | false       | Show entire classname without padding / ellipsis                     |
 
-- If `cd-printer-hide-namespace` is `false` and `cd-printer-dont-format-classname` is `false`, names are padded / truncated to fit the terminal
+- Class names are padded and, if needed, ellipsized to about 60% of the terminal width (40–60 characters) unless `cd-printer-dont-format-classname` is `true`
 - If `cd-printer-dont-format-classname` is `true`, nothing is formatted and the full classname is displayed
 
 #### Markers
@@ -89,7 +91,7 @@ Customize markers by modifying `phpunit-printer.yml`.
 | cd-deprecation   | "▲ "         |
 | cd-notice        | "ℹ "         |
 
-\* Notice the space after each marker. This makes the output a little more visually appealing; keep that in mind when creating your own custom markers.
+\* Notice the single space after each marker. That is the gap between checks (`✔ ✔`); keep it when creating your own custom markers..
 
 ## License
 

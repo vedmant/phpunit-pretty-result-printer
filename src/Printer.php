@@ -35,7 +35,7 @@ final class Printer
 
     private int $column = 0;
 
-    private int $maxClassNameLength = 50;
+    private int $maxClassNameLength = 60;
 
     private int $maxNumberOfColumns;
 
@@ -80,11 +80,10 @@ final class Printer
         $this->loadConfiguration();
 
         $this->maxNumberOfColumns = max(16, $columns - 5);
-        $this->maxClassNameLength = min((int) ($this->maxNumberOfColumns / 2), $this->maxClassNameLength);
-
-        if ($this->hideNamespace) {
-            $this->maxClassNameLength = 32;
-        }
+        $this->maxClassNameLength = min(
+            max(40, (int) ($this->maxNumberOfColumns * 0.6)),
+            $this->maxClassNameLength,
+        );
     }
 
     public function executionStarted(): void
@@ -279,15 +278,13 @@ final class Printer
             $buffer .= ' ' . ucfirst($status);
         }
 
-        $buffer .= ' ';
-
         $this->write($this->colorize($color, $buffer));
 
         if ($this->debug) {
             $this->write(PHP_EOL);
         }
 
-        $this->column += 3;
+        $this->column += $this->visibleWidth($buffer);
     }
 
     private function printBanner(): void
@@ -397,6 +394,15 @@ final class Printer
             'notice'      => 'N',
             default       => '?',
         };
+    }
+
+    private function visibleWidth(string $buffer): int
+    {
+        if (function_exists('mb_strwidth')) {
+            return max(1, mb_strwidth($buffer, 'UTF-8'));
+        }
+
+        return max(1, strlen($buffer));
     }
 
     private function colorize(string $color, string $buffer): string
