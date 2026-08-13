@@ -17,6 +17,7 @@ scripts/
 *.taskpaper
 NOTES.md
 .phpunit.result.cache
+.phpunit.cache/
 coverage.xml
 node_modules/
 clover.xml

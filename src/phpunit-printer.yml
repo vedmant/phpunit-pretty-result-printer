@@ -13,3 +13,6 @@ markers:
   cd-skipped: "⇢ "
   cd-incomplete: "∅ "
   cd-risky: "⌽ "
+  cd-warning: "⚠ "
+  cd-deprecation: "▲ "
+  cd-notice: "ℹ "

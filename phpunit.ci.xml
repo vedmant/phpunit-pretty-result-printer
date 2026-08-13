@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
+         colors="false"
+         cacheDirectory=".phpunit.cache"
          failOnRisky="false"
-         processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
-         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
-         verbose="true"
 >
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Tickets">
-            <directory>tickets</directory>
-        </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
+    <extensions>
+        <bootstrap class="Codedungeon\PHPUnitPrettyResultPrinter\Extension"/>
+    </extensions>
 </phpunit>

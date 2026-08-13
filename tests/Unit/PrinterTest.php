@@ -1,84 +1,80 @@
 <?php
 
+declare(strict_types=1);
+
 use Codedungeon\PHPUnitPrettyResultPrinter\Printer;
+use PHPUnit\Framework\TestCase;
 
-/**
- *  Corresponding Class to test Printer class.
- *
- * @author mike erickson
- */
-class PrinterTest extends PHPUnit\Framework\TestCase
+final class PrinterTest extends TestCase
 {
-    /**
-     * @var
-     */
-    protected $printer;
+    /** @var resource */
+    private $stream;
 
-    public function setUp(): void
+    private Printer $printer;
+
+    protected function setUp(): void
     {
-        $this->printer = new Printer();
+        $this->stream  = fopen('php://memory', 'r+');
+        $this->printer = new Printer(false, 80, false, $this->stream);
     }
 
-    /** @test */
-    public function should_return_module_package_name(): void
+    protected function tearDown(): void
+    {
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
+        }
+    }
+
+    public function testPackageName(): void
     {
         $this->assertSame('PHPUnit Pretty Result Printer', $this->printer->packageName());
     }
 
-    /** @test */
-    public function should_return_full_pathname_to_config_file(): void
+    public function testVersion(): void
     {
-        $this->assertStringContainsString('phpunit-printer.yml', $this->printer->getConfigurationFile());
-        $this->assertFileExists($this->printer->getConfigurationFile());
+        $this->assertSame('1.0.0', $this->printer->version());
+        $this->assertSame('1.0.0', $this->printer->getVersion());
     }
 
-    /** @skip */
-    public function should_use_configuration_file(): void
+    public function testGetConfigurationFileFindsPhpunitPrinterYml(): void
     {
-        $this->assertStringContainsString('phpunit-printer.yml', $this->printer->getConfigurationFile());
-        $this->assertFileExists($this->printer->getConfigurationFile());
+        $path = $this->printer->getConfigurationFile();
+
+        $this->assertStringContainsString('phpunit-printer.yml', $path);
+        $this->assertFileExists($path);
     }
 
-    /** @skip  */
-    public function should_throw_an_error()
+    public function testFormatClassNameAddsPrefixAndPadding(): void
     {
-        // this is toggled to assure failure testing and reporting
-        $this->assertTrue(true);
+        $formatted = $this->printer->formatClassName('FooTest');
+
+        $this->assertStringStartsWith(' ==> ', $formatted);
+        $this->assertStringContainsString('FooTest', $formatted);
+        $this->assertSame(37, strlen($formatted));
     }
 
-    /** @skip  */
-    public function should_fail()
+    public function testFormatClassNameKeepsNamespaceWhenConfigured(): void
     {
-        $this->assertTrue(false);
+        $formatted = $this->printer->formatClassName('App\\Tests\\ExampleTest');
+
+        $this->assertStringStartsWith(' ==> ', $formatted);
+        $this->assertStringContainsString('App\\Tests\\ExampleTest', $formatted);
     }
 
-    /** @skip  */
-    public function should_fail_again()
+    public function testFormatClassNameHidesNamespaceWhenConfigured(): void
     {
-        $this->assertTrue(false);
+        $property = new ReflectionProperty(Printer::class, 'hideNamespace');
+        $property->setValue($this->printer, true);
+
+        $formatted = $this->printer->formatClassName('App\\Tests\\ExampleTest');
+
+        $this->assertStringStartsWith(' ==> ', $formatted);
+        $this->assertStringContainsString('ExampleTest', $formatted);
+        $this->assertStringNotContainsString('App\\Tests\\', $formatted);
     }
 
-    /** @skip  */
-    public function should_skip()
+    public function testMarkerForPass(): void
     {
-        $this->markTestSkipped();
-    }
-
-    /** @skip  */
-    public function should_skip_another()
-    {
-        $this->markTestSkipped();
-    }
-
-    /** @skip  */
-    public function should_be_incomplete()
-    {
-        $this->markTestIncomplete();
-    }
-
-    /** @skip  */
-    public function should_be_risky()
-    {
-        $this->markAsRisky();
+        $this->assertSame('✔ ', $this->printer->markerFor('pass'));
     }
 }

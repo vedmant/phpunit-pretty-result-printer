@@ -1,5 +1,7 @@
 <?php
 
-require_once 'PrinterInit.php';
+declare(strict_types=1);
 
-(new PrinterInit())->init('always', $_SERVER['argv']);
+require_once __DIR__ . '/PrinterInit.php';
+
+(new Codedungeon\PHPUnitPrettyResultPrinter\PrinterInit())->init('always', $_SERVER['argv'] ?? []);

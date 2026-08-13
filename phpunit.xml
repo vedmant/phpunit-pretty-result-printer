@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit beStrictAboutOutputDuringTests="false" bootstrap="vendor/autoload.php" colors="true"
-         convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true"
-         failOnRisky="false" processIsolation="false" stopOnError="false" stopOnFailure="false" verbose="true"
-         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         failOnRisky="false"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnPhpunitDeprecations="true"
+>
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Feature">
-            <directory>tests/Feature</directory>
-        </testsuite>
-        <testsuite name="Tickets">
-            <directory>tickets</directory>
-        </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <source>
+        <include>
             <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </source>
+    <extensions>
+        <bootstrap class="Codedungeon\PHPUnitPrettyResultPrinter\Extension"/>
+    </extensions>
 </phpunit>

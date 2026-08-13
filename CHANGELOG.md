@@ -6,6 +6,18 @@ Apologies that this starts with version 0.27, but for some reason I did not have
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] -- 2026.08.13
+
+### Changed
+
+-   Rewrote as a PHPUnit 11 / 12 **extension** (`Extension` + `PrinterTracer`). PHPUnit 10 removed `printerClass` / `--printer`, so the old `DefaultResultPrinter` subclasses are gone
+-   Requires PHP 8.2+ (PHPUnit `^11 || ^12`)
+-   Package name is now `vedmant/phpunit-pretty-result-printer` (fork of `codedungeon/phpunit-result-printer`)
+-   YAML config is parsed with `symfony/yaml`; dropped `codedungeon/php-cli-colors` and `hassankhan/config`
+-   Removed PHP 8.3 deprecations (`${var}` interpolation and dynamic properties)
+-   Progress output is replaced via `$facade->replaceProgressOutput()`; `--no-progress` is not required
+-   Optional markers: `cd-warning`, `cd-deprecation`, `cd-notice` (with fallbacks)
+
 ## [0.30.1] -- 2020.12.24
 
 ### Changed
