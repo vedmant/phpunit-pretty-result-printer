@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Rewrote as a PHPUnit 11 / 12 **extension** (`Extension` + `PrinterTracer`). PHPUnit 10 removed `printerClass` / `--printer`, so the old `DefaultResultPrinter` subclasses are gone
 -   Requires PHP 8.2+ (PHPUnit `^11 || ^12`)
--   Package name is now `vedmant/phpunit-pretty-result-printer` (fork of `codedungeon/phpunit-result-printer`)
+-   Package name is now [`vedmant/phpunit-pretty-result-printer`](https://packagist.org/packages/vedmant/phpunit-pretty-result-printer) (fork of `codedungeon/phpunit-result-printer`), updated for current PHPUnit and PHP
 -   YAML config is parsed with `symfony/yaml`; dropped `codedungeon/php-cli-colors` and `hassankhan/config`
 -   Removed PHP 8.3 deprecations (`${var}` interpolation and dynamic properties)
 -   Progress output is replaced via `$facade->replaceProgressOutput()`; `--no-progress` is not required

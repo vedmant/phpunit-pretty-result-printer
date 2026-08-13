@@ -1,8 +1,10 @@
 # PHPUnit Pretty Result Printer
 
-Version 1.0.0
+Version 1.0.0 — updated for **PHPUnit 11 / 12** and **PHP 8.2+** (including PHP 8.3 / 8.4 / 8.5).
 
-A PHPUnit **11 / 12** extension that replaces progress output with a compact, colorized class-and-marker line.
+📦 Packagist: [vedmant/phpunit-pretty-result-printer](https://packagist.org/packages/vedmant/phpunit-pretty-result-printer)
+
+This is a maintained fork of [`codedungeon/phpunit-result-printer`](https://github.com/mikeerickson/phpunit-pretty-result-printer). The original package stopped at PHPUnit 9. PHPUnit 10 removed `printerClass` / `--printer`, so this rewrite is a PHPUnit **extension** that still prints the same compact progress line.
 
 ```
 PHPUnit Pretty Result Printer 1.0.0 by Codedungeon and contributors.
@@ -14,19 +16,17 @@ PHPUnit Pretty Result Printer 1.0.0 by Codedungeon and contributors.
 
 PHPUnit still prints its own failure details and summary. Only **progress** is replaced (`$facade->replaceProgressOutput()`), so you do **not** need `--no-progress`.
 
-📦 [vedmant/phpunit-pretty-result-printer -- Packagist](https://packagist.org/packages/vedmant/phpunit-pretty-result-printer)
-
-This is a maintained fork of [`codedungeon/phpunit-result-printer`](https://github.com/mikeerickson/phpunit-pretty-result-printer). PHPUnit 10 removed `printerClass` / `--printer`, so the old `DefaultResultPrinter` subclasses are a dead API.
-
-Requires **PHP 8.2+**.
-
 ---
 
 ## Installation
 
+Install from [Packagist](https://packagist.org/packages/vedmant/phpunit-pretty-result-printer):
+
 ```bash
 composer require --dev vedmant/phpunit-pretty-result-printer
 ```
+
+Requires **PHP 8.2+** and **PHPUnit 11 or 12**.
 
 If you previously used the abandoned `codedungeon/phpunit-result-printer` package, this fork `replace`s it so Composer can swap them cleanly.
 
