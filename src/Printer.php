@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Codedungeon\PHPUnitPrettyResultPrinter;
 
 use Bakyt\Console\Phanybar;
+use Composer\InstalledVersions;
 use PHPUnit\Event\Code\Test;
 use PHPUnit\Event\Code\TestMethod;
 use Symfony\Component\Yaml\Yaml;
@@ -176,7 +177,15 @@ final class Printer
 
     public function version(): string
     {
-        return $this->composerValue('version', '<unknown>');
+        if (class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('vedmant/phpunit-pretty-result-printer')) {
+            $version = InstalledVersions::getPrettyVersion('vedmant/phpunit-pretty-result-printer');
+
+            if (is_string($version) && $version !== '') {
+                return $version;
+            }
+        }
+
+        return $this->composerValue('version', '1.0.0');
     }
 
     public function getVersion(): string

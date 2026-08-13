@@ -1,6 +1,5 @@
 {
     "name": "vedmant/phpunit-pretty-result-printer",
-    "version": "1.0.0",
     "description": "PHPUnit Pretty Result Printer",
     "homepage": "https://packagist.org/packages/vedmant/phpunit-pretty-result-printer",
     "keywords": [

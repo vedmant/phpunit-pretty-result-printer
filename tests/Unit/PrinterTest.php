@@ -32,8 +32,8 @@ final class PrinterTest extends TestCase
 
     public function testVersion(): void
     {
-        $this->assertSame('1.0.0', $this->printer->version());
-        $this->assertSame('1.0.0', $this->printer->getVersion());
+        $this->assertNotSame('', $this->printer->version());
+        $this->assertSame($this->printer->version(), $this->printer->getVersion());
     }
 
     public function testGetConfigurationFileFindsPhpunitPrinterYml(): void
